@@ -4,25 +4,16 @@ import React from "react";
 
 function DeleteBtn({ id }) {
   const handleDelete = async () => {
-    const confirmed = confirm("ํYou want delete?");
+    const confirmed = confirm("You want delete?");
 
     if (confirmed) {
-      try {
-        const res = await fetch(`http://localhost:3000/api/posts?id=${id}`, {
+        const res = await fetch(`http://localhost:3000/api/posts/${id}`, {
           method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
         });
 
-        if (!res.ok) {
-          throw new Error("Failed to delete the post");
+        if (res.ok) {
+          window.location.reload();
         }
-
-        window.location.reload();
-      } catch (error) {
-        console.error("Error deleting post: ", error);
-      }
     }
   };
 

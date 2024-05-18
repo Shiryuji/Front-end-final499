@@ -11,9 +11,9 @@ function EditPostPage({ params }) {
     const [postData, setPostData] = useState("");
 
     //New data of post
-    const [newTitle, setNewTitle] = useState("");
-    const [newImg, setNewImg] = useState("");
-    const [newContent, setNewContent] = useState("");
+    const [title, setTitle] = useState("");
+    const [img, setImg] = useState("");
+    const [content, setContent] = useState("");
 
     const router = useRouter();
 
@@ -30,7 +30,9 @@ function EditPostPage({ params }) {
 
             const data = await res.json();
             console.log("edit post: ", data);
-            setPostData(data.post);
+            setTitle(data.title);
+            setImg(data.img);
+            setContent(data.content);
 
         } catch(error) {
             console.log(error);
@@ -42,27 +44,26 @@ function EditPostPage({ params }) {
     }, [])
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
-         try {
-            const res = await fetch(`http://localhost:3000/api/posts/${id}`, {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ newTitle, newImg, newContent })
-                
-            })
-
-            if (!res.ok) {
-                throw new Error("failed to update post");
-            }
-
-            router.refresh();
-            router.push("/");
-
-         } catch(error) {
-            console.log(error);
-         }
+      e.preventDefault();
+      try {
+          const res = await fetch(`http://localhost:3000/api/posts/${id}`, {
+              method: "PUT",
+              headers: {
+                  "Content-Type": "application/json"
+              },
+              body: JSON.stringify({ title, img, content })
+          })
+  
+          if (!res.ok) {
+              throw new Error("Failed to update Posts")
+          }
+  
+          router.refresh();
+          router.push("/")
+  
+      } catch(error) {
+          console.log(error);
+      }
     }
 
     return (
@@ -74,26 +75,26 @@ function EditPostPage({ params }) {
           </Link>
           <form onSubmit={handleSubmit} className="max-w-lg mx-auto bg-white shadow-md rounded-lg p-6">
             <input
-              onChange={(e) => setNewTitle(e.target.value)}
+              onChange={(e) => setTitle(e.target.value)}
               type="text"
               className="w-full bg-gray-100 border border-gray-300 py-2 px-4 rounded mb-4"
-              placeholder="Name"
-              value={newTitle}
+              placeholder={postData.title}
+              value={title}
             />
             <input
-              onChange={(e) => setNewImg(e.target.value)}
+              onChange={(e) => setImg(e.target.value)}
               type="text"
               className="w-full bg-gray-100 border border-gray-300 py-2 px-4 rounded mb-4"
-              placeholder="Img Url"
-              value={newImg}
+              placeholder={postData.img}
+              value={img}
             />
             <textarea
-              onChange={(e) => setNewContent(e.target.value)}
+              onChange={(e) => setContent(e.target.value)}
               cols="30"
               rows="10"
               className="w-full bg-gray-100 border border-gray-300 py-2 px-4 rounded mb-4"
-              placeholder="Description"
-              value={newContent}
+              placeholder={postData.content}
+              value={content}
             ></textarea>
             <button type="submit" className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 px-4 rounded">
               Edit menu

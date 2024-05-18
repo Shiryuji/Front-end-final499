@@ -18,7 +18,6 @@ export default function Home() {
   const getPosts = async () => {
     try {
       const res = await fetch("http://localhost:3000/api/posts", {
-        method: "GET",
         cache: "no-store",
       });
 
@@ -27,7 +26,7 @@ export default function Home() {
       }
 
       const data = await res.json();
-      setPostData(data.posts);
+      setPostData(data);
     } catch (error) {
       console.error("Error loading posts: ", error);
       setError(error.message);
@@ -56,7 +55,7 @@ export default function Home() {
         {postData && postData.length > 0 ? (
           postData.map((val) => (
             <div key={val._id} className="bg-white shadow-lg rounded-lg overflow-hidden transform transition duration-300 hover:scale-105">
-              <Image src={val.img} width={300} height={200} alt={val.title} className="w-full h-48 object-cover" />
+              <img src={val.img} width={300} height={200} alt={val.title} className="w-full h-48 object-cover" />
               <div className="p-4">
                 <h4 className="text-xl font-semibold mb-2">{val.title}</h4>
                 <p className="text-gray-600 mb-4">{val.content}</p>
